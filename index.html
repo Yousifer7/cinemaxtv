@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CineMax TV</title>
+<style>
+  :root {
+    --red: #E50914;
+    --red-dark: #b0060f;
+    --bg: #0a0a0a;
+    --surface: #141414;
+    --surface2: #1e1e1e;
+    --border: rgba(255,255,255,0.08);
+    --text: #ffffff;
+    --text-muted: rgba(255,255,255,0.55);
+    --radius: 14px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', 'Arial', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    direction: rtl;
+  }
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 0; opacity: 0.4;
+  }
+  .wrap { max-width: 860px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
+
+  /* Hero */
+  .hero { text-align: center; padding: 80px 24px 60px; }
+  .logo-ring {
+    width: 120px; height: 120px; margin: 0 auto 28px;
+    border-radius: 28px; background: var(--surface2);
+    border: 1.5px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 52px; position: relative;
+  }
+  .logo-ring::after {
+    content: ''; position: absolute; inset: -5px;
+    border-radius: 33px; border: 1px solid rgba(229,9,20,0.3);
+  }
+  .app-name {
+    font-size: 38px; font-weight: 700; letter-spacing: -0.5px;
+    background: linear-gradient(135deg, #fff 40%, rgba(255,255,255,0.5));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .version-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(229,9,20,0.12); border: 1px solid rgba(229,9,20,0.3);
+    color: #ff4d5a; font-size: 13px; font-weight: 600;
+    padding: 5px 14px; border-radius: 100px; margin: 14px auto 0;
+  }
+  .version-badge::before {
+    content: ''; width: 6px; height: 6px;
+    background: var(--red); border-radius: 50%; animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%,100% { opacity:1; transform:scale(1); }
+    50% { opacity:0.4; transform:scale(0.7); }
+  }
+  .tagline { font-size: 15px; color: var(--text-muted); margin-top: 14px; line-height: 1.7; }
+  .disclaimer {
+    display: inline-block; margin-top: 10px;
+    font-size: 12px; color: rgba(255,255,255,0.3);
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.07);
+    padding: 5px 14px; border-radius: 100px;
+  }
+
+  /* Download */
+  .download-wrap { display: flex; justify-content: center; gap: 12px; margin-top: 36px; flex-wrap: wrap; }
+  .btn-download {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: var(--red); color: #fff; text-decoration: none;
+    font-size: 16px; font-weight: 600; padding: 14px 32px;
+    border-radius: var(--radius); transition: background 0.2s, transform 0.15s; border: none; cursor: pointer;
+  }
+  .btn-download:hover { background: var(--red-dark); transform: translateY(-2px); }
+
+  /* Stats */
+  .stats {
+    display: flex; justify-content: center; gap: 0;
+    margin: 48px auto 0; max-width: 500px;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); overflow: hidden;
+  }
+  .stat { flex: 1; text-align: center; padding: 18px 12px; border-left: 1px solid var(--border); }
+  .stat:last-child { border-left: none; }
+  .stat-val { font-size: 18px; font-weight: 700; color: var(--text); }
+  .stat-label { font-size: 11px; color: var(--text-muted); margin-top: 3px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+  /* Divider */
+  .divider { height: 1px; background: var(--border); margin: 60px 0; }
+
+  /* Changelog */
+  .section-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; color: var(--red); margin-bottom: 10px; }
+  .changelog-header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 28px; flex-wrap: wrap; gap: 12px; }
+  .changelog-title { font-size: 26px; font-weight: 700; }
+  .release-date { font-size: 13px; color: var(--text-muted); background: var(--surface2); padding: 5px 12px; border-radius: 8px; border: 1px solid var(--border); }
+  .changelog-list { display: flex; flex-direction: column; gap: 10px; }
+  .cl-item {
+    display: flex; gap: 14px; background: var(--surface);
+    border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 16px 18px; align-items: flex-start; transition: border-color 0.2s;
+  }
+  .cl-item:hover { border-color: rgba(255,255,255,0.15); }
+  .cl-icon { width: 34px; height: 34px; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+  .icon-new    { background: rgba(229,9,20,0.12); }
+  .icon-fix    { background: rgba(16,185,129,0.12); }
+  .icon-update { background: rgba(59,130,246,0.12); }
+  .icon-design { background: rgba(168,85,247,0.12); }
+  .cl-body { flex: 1; }
+  .cl-title { font-size: 15px; font-weight: 600; line-height: 1.4; color: var(--text); }
+  .cl-desc { font-size: 13px; color: var(--text-muted); margin-top: 4px; line-height: 1.6; }
+  .cl-tag { font-size: 11px; font-weight: 600; padding: 2px 9px; border-radius: 100px; flex-shrink: 0; margin-top: 2px; }
+  .tag-new    { background: rgba(229,9,20,0.15);    color: #ff6b75; }
+  .tag-fix    { background: rgba(16,185,129,0.15);  color: #34d399; }
+  .tag-update { background: rgba(59,130,246,0.15);  color: #60a5fa; }
+  .tag-design { background: rgba(168,85,247,0.15);  color: #c084fc; }
+
+  /* Contact */
+  .contact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-top: 24px; }
+  .contact-card {
+    display: flex; align-items: center; gap: 14px;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 16px 18px;
+    text-decoration: none; color: var(--text);
+    transition: border-color 0.2s, background 0.2s; cursor: pointer;
+  }
+  .contact-card:hover { border-color: rgba(255,255,255,0.2); background: var(--surface2); }
+  .contact-icon {
+    width: 42px; height: 42px; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; flex-shrink: 0;
+  }
+  .ci-tg   { background: rgba(37,167,218,0.12); }
+  .ci-ig   { background: rgba(225,48,108,0.12); }
+  .ci-ch   { background: rgba(229,9,20,0.12); }
+  .ci-mail { background: rgba(251,191,36,0.12); }
+  .contact-info { flex: 1; min-width: 0; }
+  .contact-name { font-size: 14px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .contact-handle { font-size: 12px; color: var(--text-muted); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .contact-arrow { color: var(--text-muted); font-size: 16px; flex-shrink: 0; }
+
+  /* Footer */
+  footer { text-align: center; padding: 48px 24px; color: var(--text-muted); font-size: 13px; border-top: 1px solid var(--border); line-height: 1.8; }
+  footer a { color: var(--red); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+
+  @media (max-width: 600px) {
+    .app-name { font-size: 28px; }
+    .stats { flex-direction: column; }
+    .stat { border-left: none; border-top: 1px solid var(--border); }
+    .stat:first-child { border-top: none; }
+    .changelog-header { flex-direction: column; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="wrap">
+    <div class="logo-ring">
+      <img src="logo.png" width="80" height="80" style="border-radius: 20px;" alt="CineMax TV Logo">
+    </div>
+    <h1 class="app-name">CineMax TV</h1>
+    <div class="version-badge">الإصدار 2.0</div>
+    <p class="tagline">
+      تطبيق مشاهدة أفلام ومسلسلات مخصص لشاشات Android TV<br>
+      معتمد بالكامل على سيرفر سينمانا
+    </p>
+    <span class="disclaimer">هذا التطبيق غير رسمي ولا ينتمي لـ "شبكتي"</span>
+
+    <div class="download-wrap">
+      <a href="CineMaxTV_v2.0.apk" class="btn-download" download>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="7 10 12 15 17 10"/>
+          <line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+        تحميل التطبيق — v2.0
+      </a>
+    </div>
+
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-val">Android TV</div>
+        <div class="stat-label">المنصة</div>
+      </div>
+      <div class="stat">
+        <div class="stat-val">Android 5+</div>
+        <div class="stat-label">المتطلبات</div>
+      </div>
+      <div class="stat">
+        <div class="stat-val">13.3 MB</div>
+        <div class="stat-label">الحجم</div>
+      </div>
+      <div class="stat">
+        <div class="stat-val">5/6/2025</div>
+        <div class="stat-label">آخر تحديث</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="divider"></div>
+
+  <div class="section-label">ما الجديد</div>
+  <div class="changelog-header">
+    <h2 class="changelog-title">تحديث 2.0</h2>
+    <span class="release-date">5 يونيو 2025</span>
+  </div>
+
+  <div class="changelog-list">
+    <div class="cl-item">
+      <div class="cl-icon icon-new">⬇️</div>
+      <div class="cl-body">
+        <div class="cl-title">التحميل المُسبق</div>
+        <div class="cl-desc">ميزة جديدة تُحمّل جزءاً من الفيديو مسبقاً قبل التشغيل، مما يُقلّل التقطيع عند ضعف الاتصال أو بطء السيرفر. يمكن تفعيلها والتحكم في حجمها من إعدادات المشغل.</div>
+      </div>
+      <span class="cl-tag tag-new">جديد</span>
+    </div>
+    <div class="cl-item">
+      <div class="cl-icon icon-new">🔍</div>
+      <div class="cl-body">
+        <div class="cl-title">صفحة بحث محدّثة بالكامل</div>
+        <div class="cl-desc">إمكانية التبديل بين البحث في سينمانا والبحث في CEE، مع تحديث شامل لشكل الصفحة وطريقة عرض النتائج.</div>
+      </div>
+      <span class="cl-tag tag-new">جديد</span>
+    </div>
+    <div class="cl-item">
+      <div class="cl-icon icon-fix">🕓</div>
+      <div class="cl-body">
+        <div class="cl-title">إصلاح سجل المشاهدة</div>
+        <div class="cl-desc">إعادة تحميل تلقائية عند فشل جلب الأعمال، إمكانية التمرير للأسفل لعرض الأعمال القديمة، وإضافة تاريخ المشاهدة لكل عمل.</div>
+      </div>
+      <span class="cl-tag tag-fix">إصلاح</span>
+    </div>
+    <div class="cl-item">
+      <div class="cl-icon icon-new">🟣</div>
+      <div class="cl-body">
+        <div class="cl-title">تمييز مشاهد الرقابة العائلية على شريط التقدم</div>
+        <div class="cl-desc">تُميَّز المشاهد الخاضعة للرقابة بلون بنفسجي على شريط التقدم لمعرفة موضعها مسبقاً.</div>
+      </div>
+      <span class="cl-tag tag-new">جديد</span>
+    </div>
+    <div class="cl-item">
+      <div class="cl-icon icon-fix">📋</div>
+      <div class="cl-body">
+        <div class="cl-title">إصلاح قوائمي</div>
+        <div class="cl-desc">تعرض الأعمال الموجودة في قوائمك الشخصية حتى حين يفشل سيرفر سينمانا.</div>
+      </div>
+      <span class="cl-tag tag-fix">إصلاح</span>
+    </div>
+    <div class="cl-item">
+      <div class="cl-icon icon-fix">🖼️</div>
+      <div class="cl-body">
+        <div class="cl-title">إصلاح جلب معلومات العمل وخلفيته</div>
+        <div class="cl-desc">منطق محسّن لجلب معلومات العمل واللوغو والخلفية، أصبحت الأخطاء نادرة جداً.</div>
+      </div>
+      <span class="cl-tag tag-fix">إصلاح</span>
+    </div>
+    <div class="cl-item">
+      <div class="cl-icon icon-update">🌐</div>
+      <div class="cl-body">
+        <div class="cl-title">إضافة لغة العمل في كبسولات المعلومات</div>
+        <div class="cl-desc">تظهر لغة المسلسل أو الفيلم ضمن كبسولات المعلومات بجانب البوستر.</div>
+      </div>
+      <span class="cl-tag tag-update">تحسين</span>
+    </div>
+    <div class="cl-item">
+      <div class="cl-icon icon-update">✅</div>
+      <div class="cl-body">
+        <div class="cl-title">تسجيل الحلقات السابقة كمشاهَدة</div>
+        <div class="cl-desc">إمكانية تسجيل جميع الحلقات السابقة في المسلسل كـ "تمت مشاهدتها" عند البدء من منتصف المسلسل.</div>
+      </div>
+      <span class="cl-tag tag-update">تحسين</span>
+    </div>
+    <div class="cl-item">
+      <div class="cl-icon icon-design">🎨</div>
+      <div class="cl-body">
+        <div class="cl-title">تحديثات بصرية متعددة</div>
+        <div class="cl-desc">تحديث شكل الأعمال المميزة، وأقسامي بصور تمثل كل قسم، وزر التخطي، واختيار المواسم، وتعديلات CEE.</div>
+      </div>
+      <span class="cl-tag tag-design">تصميم</span>
+    </div>
+    <div class="cl-item">
+      <div class="cl-icon icon-fix">💬</div>
+      <div class="cl-body">
+        <div class="cl-title">تحسينات الترجمة والتنقل</div>
+        <div class="cl-desc">إصلاح تنسيقات ألوان الترجمة، وإصلاح زر التنقل بين حلقات المواسم، وإضافة خط Adobe Arabic Regular.</div>
+      </div>
+      <span class="cl-tag tag-fix">إصلاح</span>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section-label">تواصل معنا</div>
+  <h2 style="font-size:22px; font-weight:700; margin-bottom:6px;">اقتراح أو تعديل؟</h2>
+  <p style="color:var(--text-muted); font-size:14px; margin-bottom:0;">نرحب بأي ملاحظة أو اقتراح لتحسين التطبيق</p>
+
+  <div class="contact-grid">
+
+    <a href="https://t.me/Yousif313" target="_blank" class="contact-card">
+      <div class="contact-icon" style="background:rgba(37,167,218,0.15);">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+          <circle cx="12" cy="12" r="12" fill="#25A8DA"/>
+          <path d="M5.5 11.8L17 7l-2.5 11-3.2-2.8-1.5 1.4V14l5.5-5.2-6.8 4.2L5.5 11.8z" fill="white"/>
+        </svg>
+      </div>
+      <div class="contact-info">
+        <div class="contact-name">تيليغرام</div>
+        <div class="contact-handle">@Yousif313</div>
+      </div>
+      <span class="contact-arrow">↗</span>
+    </a>
+
+    <a href="https://t.me/YOUR_CHANNEL_HERE" target="_blank" class="contact-card">
+      <div class="contact-icon" style="background:rgba(37,167,218,0.08); border:1px solid rgba(37,167,218,0.2);">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+          <circle cx="12" cy="12" r="12" fill="#1a7fa8"/>
+          <path d="M5.5 11.8L17 7l-2.5 11-3.2-2.8-1.5 1.4V14l5.5-5.2-6.8 4.2L5.5 11.8z" fill="white"/>
+          <circle cx="17.5" cy="6.5" r="3" fill="#E50914" stroke="#0a0a0a" stroke-width="1"/>
+          <text x="17.5" y="9" text-anchor="middle" fill="white" font-size="4" font-weight="bold">ch</text>
+        </svg>
+      </div>
+      <div class="contact-info">
+        <div class="contact-name">قناة التطبيق</div>
+        <div class="contact-handle">قريباً على تيليغرام</div>
+      </div>
+      <span class="contact-arrow">↗</span>
+    </a>
+
+    <a href="https://www.instagram.com/y3.1.3/" target="_blank" class="contact-card">
+      <div class="contact-icon" style="background:rgba(225,48,108,0.12);">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+          <defs>
+            <radialGradient id="ig1" cx="30%" cy="107%" r="150%">
+              <stop offset="0%" stop-color="#fdf497"/>
+              <stop offset="5%" stop-color="#fdf497"/>
+              <stop offset="45%" stop-color="#fd5949"/>
+              <stop offset="60%" stop-color="#d6249f"/>
+              <stop offset="90%" stop-color="#285AEB"/>
+            </radialGradient>
+          </defs>
+          <rect x="2" y="2" width="20" height="20" rx="6" fill="url(#ig1)"/>
+          <rect x="2" y="2" width="20" height="20" rx="6" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="0.5"/>
+          <circle cx="12" cy="12" r="4.5" stroke="white" stroke-width="1.8" fill="none"/>
+          <circle cx="17" cy="7" r="1.2" fill="white"/>
+        </svg>
+      </div>
+      <div class="contact-info">
+        <div class="contact-name">إنستغرام</div>
+        <div class="contact-handle">@y3.1.3</div>
+      </div>
+      <span class="contact-arrow">↗</span>
+    </a>
+
+    <a href="mailto:yousif31355@gmail.com" class="contact-card">
+      <div class="contact-icon" style="background:rgba(255,255,255,0.06);">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+          <rect x="2" y="4" width="20" height="16" rx="2" fill="white"/>
+          <path d="M2 6l10 7 10-7" stroke="none"/>
+          <path d="M2 7l4 3-4 9V7z" fill="#4285F4"/>
+          <path d="M22 7l-4 3 4 9V7z" fill="#34A853"/>
+          <path d="M18 10l-6 4-6-4L2 7h20l-4 3z" fill="#EA4335"/>
+          <path d="M6 10l6 4 6-4 4 9H2l4-9z" fill="#FBBC04"/>
+          <path d="M6 10l6 4 6-4" fill="#EA4335"/>
+        </svg>
+      </div>
+      <div class="contact-info">
+        <div class="contact-name">البريد الإلكتروني</div>
+        <div class="contact-handle">yousif31355@gmail.com</div>
+      </div>
+      <span class="contact-arrow">↗</span>
+    </a>
+
+  </div>
+
+  <div class="divider"></div>
+</div>
+
+<footer>
+  <p>CineMax TV &mdash; جميع الحقوق محفوظة &copy; 2025</p>
+  <p style="margin-top:6px; font-size:12px; color:rgba(255,255,255,0.25);">
+    هذا التطبيق غير رسمي ولا ينتمي لـ "شبكتي"
+  </p>
+</footer>
+
+</body>
+</html>
