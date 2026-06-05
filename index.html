@@ -32,7 +32,6 @@
   }
   .wrap { max-width: 860px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
 
-  /* Hero */
   .hero { text-align: center; padding: 80px 24px 60px; }
   .logo-ring {
     width: 120px; height: 120px; margin: 0 auto 28px;
@@ -73,8 +72,7 @@
     padding: 5px 14px; border-radius: 100px;
   }
 
-  /* Download */
-  .download-wrap { display: flex; justify-content: center; gap: 12px; margin-top: 36px; flex-wrap: wrap; }
+  .download-wrap { display: flex; justify-content: center; align-items: center; flex-direction: column; margin-top: 36px; }
   .btn-download {
     display: inline-flex; align-items: center; gap: 10px;
     background: var(--red); color: #fff; text-decoration: none;
@@ -83,7 +81,6 @@
   }
   .btn-download:hover { background: var(--red-dark); transform: translateY(-2px); }
 
-  /* Stats */
   .stats {
     display: flex; justify-content: center; gap: 0;
     margin: 48px auto 0; max-width: 500px;
@@ -95,10 +92,8 @@
   .stat-val { font-size: 18px; font-weight: 700; color: var(--text); }
   .stat-label { font-size: 11px; color: var(--text-muted); margin-top: 3px; text-transform: uppercase; letter-spacing: 0.5px; }
 
-  /* Divider */
   .divider { height: 1px; background: var(--border); margin: 60px 0; }
 
-  /* Changelog */
   .section-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; color: var(--red); margin-bottom: 10px; }
   .changelog-header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 28px; flex-wrap: wrap; gap: 12px; }
   .changelog-title { font-size: 26px; font-weight: 700; }
@@ -124,7 +119,6 @@
   .tag-update { background: rgba(59,130,246,0.15);  color: #60a5fa; }
   .tag-design { background: rgba(168,85,247,0.15);  color: #c084fc; }
 
-  /* Contact */
   .contact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-top: 24px; }
   .contact-card {
     display: flex; align-items: center; gap: 14px;
@@ -148,7 +142,6 @@
   .contact-handle { font-size: 12px; color: var(--text-muted); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .contact-arrow { color: var(--text-muted); font-size: 16px; flex-shrink: 0; }
 
-  /* Footer */
   footer { text-align: center; padding: 48px 24px; color: var(--text-muted); font-size: 13px; border-top: 1px solid var(--border); line-height: 1.8; }
   footer a { color: var(--red); text-decoration: none; }
   footer a:hover { text-decoration: underline; }
@@ -186,6 +179,9 @@
         </svg>
         تحميل التطبيق — v2.0
       </a>
+      <div style="margin-top: 12px; font-size: 14px; color: var(--text-muted); font-weight: 600;">
+        عدد مرات التحميل: <span id="download-count" style="color: var(--red);">جاري الحساب...</span>
+      </div>
     </div>
 
     <div class="stats">
@@ -202,7 +198,7 @@
         <div class="stat-label">الحجم</div>
       </div>
       <div class="stat">
-        <div class="stat-val">5/6/2025</div>
+        <div class="stat-val">5/6/2026</div>
         <div class="stat-label">آخر تحديث</div>
       </div>
     </div>
@@ -215,7 +211,7 @@
   <div class="section-label">ما الجديد</div>
   <div class="changelog-header">
     <h2 class="changelog-title">تحديث 2.0</h2>
-    <span class="release-date">5 يونيو 2025</span>
+    <span class="release-date">5 يونيو 2026</span>
   </div>
 
   <div class="changelog-list">
@@ -389,11 +385,37 @@
 </div>
 
 <footer>
-  <p>CineMax TV &mdash; جميع الحقوق محفوظة &copy; 2025</p>
+  <p>CineMax TV &mdash; جميع الحقوق محفوظة &copy; 2026</p>
   <p style="margin-top:6px; font-size:12px; color:rgba(255,255,255,0.25);">
     هذا التطبيق غير رسمي ولا ينتمي لـ "شبكتي"
   </p>
 </footer>
 
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const countSpan = document.getElementById("download-count");
+    const downloadBtn = document.querySelector(".btn-download");
+
+    const namespace = "CineMaxTV_Yousifer7";
+    const key = "apk_downloads";
+
+    fetch(`https://api.counterapi.dev/v1/${namespace}/${key}`)
+      .then(response => response.json())
+      .then(data => {
+        countSpan.innerText = data.count || 0;
+      })
+      .catch(error => {
+        countSpan.innerText = "غير متوفر";
+      });
+
+    downloadBtn.addEventListener("click", function() {
+      fetch(`https://api.counterapi.dev/v1/${namespace}/${key}/up`)
+        .then(response => response.json())
+        .then(data => {
+          countSpan.innerText = data.count;
+        });
+    });
+  });
+</script>
 </body>
 </html>
