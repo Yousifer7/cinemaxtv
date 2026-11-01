@@ -3,419 +3,354 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CineMax TV</title>
+<title>CineMax TV — تحميل التطبيق</title>
+<meta name="description" content="تطبيق مشاهدة أفلام ومسلسلات لشاشات Android TV، معتمد على سيرفر سينمانا. حمّل آخر إصدار وثبّته بخطوات بسيطة.">
+<meta name="theme-color" content="#0a0a0a">
+<meta property="og:type" content="website">
+<meta property="og:title" content="CineMax TV — تحميل التطبيق">
+<meta property="og:description" content="أفلام ومسلسلات على شاشة التلفاز بواجهة مصممة للريموت. حمّل آخر إصدار من هنا.">
+<meta property="og:image" content="https://yousifer7.github.io/cinemaxtv/logo.png">
+<meta property="og:url" content="https://yousifer7.github.io/cinemaxtv/">
+<link rel="icon" href="logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --red: #E50914;
-    --red-dark: #b0060f;
-    --bg: #0a0a0a;
-    --surface: #141414;
-    --surface2: #1e1e1e;
-    --border: rgba(255,255,255,0.08);
-    --text: #ffffff;
-    --text-muted: rgba(255,255,255,0.55);
-    --radius: 14px;
+  :root{
+    --red:#E50914; --red-dark:#b0060f; --bg:#0a0a0a; --surface:#141414; --surface2:#1c1c1e;
+    --border:rgba(255,255,255,.08); --border2:rgba(255,255,255,.16);
+    --text:#fff; --muted:rgba(255,255,255,.58); --faint:rgba(255,255,255,.32);
+    --green:#34d399; --blue:#60a5fa; --purple:#c084fc; --radius:14px;
   }
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body {
-    font-family: 'Segoe UI', 'Arial', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    direction: rtl;
-  }
-  body::before {
-    content: '';
-    position: fixed; inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
-    pointer-events: none; z-index: 0; opacity: 0.4;
-  }
-  .wrap { max-width: 860px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{font-family:'IBM Plex Sans Arabic','Segoe UI',Tahoma,Arial,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6;-webkit-font-smoothing:antialiased}
+  a{color:inherit}
+  .wrap{max-width:900px;margin:0 auto;padding:0 20px}
 
-  .hero { text-align: center; padding: 80px 24px 60px; }
-  .logo-ring {
-    width: 120px; height: 120px; margin: 0 auto 28px;
-    border-radius: 28px; background: var(--surface2);
-    border: 1.5px solid var(--border);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 52px; position: relative;
-  }
-  .logo-ring::after {
-    content: ''; position: absolute; inset: -5px;
-    border-radius: 33px; border: 1px solid rgba(229,9,20,0.3);
-  }
-  .app-name {
-    font-size: 38px; font-weight: 700; letter-spacing: -0.5px;
-    background: linear-gradient(135deg, #fff 40%, rgba(255,255,255,0.5));
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-  }
-  .version-badge {
-    display: inline-flex; align-items: center; gap: 6px;
-    background: rgba(229,9,20,0.12); border: 1px solid rgba(229,9,20,0.3);
-    color: #ff4d5a; font-size: 13px; font-weight: 600;
-    padding: 5px 14px; border-radius: 100px; margin: 14px auto 0;
-  }
-  .version-badge::before {
-    content: ''; width: 6px; height: 6px;
-    background: var(--red); border-radius: 50%; animation: pulse 2s infinite;
-  }
-  @keyframes pulse {
-    0%,100% { opacity:1; transform:scale(1); }
-    50% { opacity:0.4; transform:scale(0.7); }
-  }
-  .tagline { font-size: 15px; color: var(--text-muted); margin-top: 14px; line-height: 1.7; }
-  .disclaimer {
-    display: inline-block; margin-top: 10px;
-    font-size: 12px; color: rgba(255,255,255,0.3);
-    background: rgba(255,255,255,0.04);
-    border: 1px solid rgba(255,255,255,0.07);
-    padding: 5px 14px; border-radius: 100px;
-  }
+  /* تركيز واضح للريموت (تطبيق Downloader على التلفاز) وللوحة المفاتيح */
+  a:focus,button:focus,summary:focus,.shot:focus{outline:3px solid #fff;outline-offset:3px}
+  a:focus:not(:focus-visible),button:focus:not(:focus-visible),summary:focus:not(:focus-visible){outline:none}
 
-  .download-wrap { display: flex; justify-content: center; align-items: center; flex-direction: column; margin-top: 36px; }
-  .btn-download {
-    display: inline-flex; align-items: center; gap: 10px;
-    background: var(--red); color: #fff; text-decoration: none;
-    font-size: 16px; font-weight: 600; padding: 14px 32px;
-    border-radius: var(--radius); transition: background 0.2s, transform 0.15s; border: none; cursor: pointer;
-  }
-  .btn-download:hover { background: var(--red-dark); transform: translateY(-2px); }
+  /* ── الأعلى ── */
+  .hero{text-align:center;padding:56px 0 28px;background:radial-gradient(ellipse 70% 60% at 50% 0%,rgba(229,9,20,.16),transparent 70%)}
+  .logo{width:104px;height:104px;margin:0 auto 22px;border-radius:26px;background:var(--surface2);border:1px solid var(--border);display:grid;place-items:center;position:relative}
+  .logo::after{content:'';position:absolute;inset:-5px;border-radius:31px;border:1px solid rgba(229,9,20,.3)}
+  .logo img{width:72px;height:72px;border-radius:18px}
+  h1{font-size:38px;font-weight:700;letter-spacing:-.3px}
+  .ver{display:inline-flex;align-items:center;gap:8px;margin-top:12px;background:rgba(229,9,20,.12);border:1px solid rgba(229,9,20,.32);color:#ff5c66;font-size:14px;font-weight:600;padding:5px 14px;border-radius:100px}
+  .ver::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--red)}
+  .tag{font-size:16px;color:var(--muted);margin-top:14px}
+  .unofficial{display:inline-block;margin-top:10px;font-size:12px;color:var(--faint);border:1px solid var(--border);padding:4px 12px;border-radius:100px}
 
-  .stats {
-    display: flex; justify-content: center; gap: 0;
-    margin: 48px auto 0; max-width: 500px;
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: var(--radius); overflow: hidden;
-  }
-  .stat { flex: 1; text-align: center; padding: 18px 12px; border-left: 1px solid var(--border); }
-  .stat:last-child { border-left: none; }
-  .stat-val { font-size: 18px; font-weight: 700; color: var(--text); }
-  .stat-label { font-size: 11px; color: var(--text-muted); margin-top: 3px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .dl{margin-top:30px;display:flex;flex-direction:column;align-items:center;gap:12px}
+  .btn-dl{display:inline-flex;align-items:center;gap:12px;background:var(--red);color:#fff;text-decoration:none;font-size:19px;font-weight:700;padding:16px 38px;border-radius:var(--radius);border:2px solid transparent;transition:background .15s,transform .15s}
+  .btn-dl:hover,.btn-dl:focus{background:var(--red-dark);transform:translateY(-2px)}
+  .btn-dl svg{flex-shrink:0}
+  .dl-meta{font-size:13px;color:var(--muted)}
+  .dl-meta b{color:#fff;font-weight:600}
+  .prev{font-size:13px;color:var(--faint);text-decoration:none;border-bottom:1px dashed var(--faint)}
+  .prev:hover,.prev:focus{color:#fff}
 
-  .divider { height: 1px; background: var(--border); margin: 60px 0; }
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);margin:34px auto 0;max-width:620px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+  .stat{padding:15px 8px;text-align:center;border-left:1px solid var(--border)}
+  .stat:last-child{border-left:none}
+  .stat .v{font-size:17px;font-weight:700;direction:ltr}
+  .stat .l{font-size:11.5px;color:var(--muted);margin-top:2px}
 
-  .section-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; color: var(--red); margin-bottom: 10px; }
-  .changelog-header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 28px; flex-wrap: wrap; gap: 12px; }
-  .changelog-title { font-size: 26px; font-weight: 700; }
-  .release-date { font-size: 13px; color: var(--text-muted); background: var(--surface2); padding: 5px 12px; border-radius: 8px; border: 1px solid var(--border); }
-  .changelog-list { display: flex; flex-direction: column; gap: 10px; }
-  .cl-item {
-    display: flex; gap: 14px; background: var(--surface);
-    border: 1px solid var(--border); border-radius: var(--radius);
-    padding: 16px 18px; align-items: flex-start; transition: border-color 0.2s;
-  }
-  .cl-item:hover { border-color: rgba(255,255,255,0.15); }
-  .cl-icon { width: 34px; height: 34px; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; margin-top: 1px; }
-  .icon-new    { background: rgba(229,9,20,0.12); }
-  .icon-fix    { background: rgba(16,185,129,0.12); }
-  .icon-update { background: rgba(59,130,246,0.12); }
-  .icon-design { background: rgba(168,85,247,0.12); }
-  .cl-body { flex: 1; }
-  .cl-title { font-size: 15px; font-weight: 600; line-height: 1.4; color: var(--text); }
-  .cl-desc { font-size: 13px; color: var(--text-muted); margin-top: 4px; line-height: 1.6; }
-  .cl-tag { font-size: 11px; font-weight: 600; padding: 2px 9px; border-radius: 100px; flex-shrink: 0; margin-top: 2px; }
-  .tag-new    { background: rgba(229,9,20,0.15);    color: #ff6b75; }
-  .tag-fix    { background: rgba(16,185,129,0.15);  color: #34d399; }
-  .tag-update { background: rgba(59,130,246,0.15);  color: #60a5fa; }
-  .tag-design { background: rgba(168,85,247,0.15);  color: #c084fc; }
+  /* ── الأقسام ── */
+  section{padding:46px 0 0}
+  .lbl{font-size:12px;font-weight:700;letter-spacing:1px;color:var(--red);margin-bottom:6px}
+  h2{font-size:25px;font-weight:700}
+  .sub{color:var(--muted);font-size:14px;margin-top:4px}
+  .head{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap;margin-bottom:20px}
+  .date{font-size:13px;color:var(--muted);background:var(--surface2);border:1px solid var(--border);padding:4px 12px;border-radius:8px}
 
-  .contact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-top: 24px; }
-  .contact-card {
-    display: flex; align-items: center; gap: 14px;
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: var(--radius); padding: 16px 18px;
-    text-decoration: none; color: var(--text);
-    transition: border-color 0.2s, background 0.2s; cursor: pointer;
-  }
-  .contact-card:hover { border-color: rgba(255,255,255,0.2); background: var(--surface2); }
-  .contact-icon {
-    width: 42px; height: 42px; border-radius: 12px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 20px; flex-shrink: 0;
-  }
-  .ci-tg   { background: rgba(37,167,218,0.12); }
-  .ci-ig   { background: rgba(225,48,108,0.12); }
-  .ci-ch   { background: rgba(229,9,20,0.12); }
-  .ci-mail { background: rgba(251,191,36,0.12); }
-  .contact-info { flex: 1; min-width: 0; }
-  .contact-name { font-size: 14px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .contact-handle { font-size: 12px; color: var(--text-muted); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .contact-arrow { color: var(--text-muted); font-size: 16px; flex-shrink: 0; }
+  /* التثبيت */
+  .code{display:flex;align-items:center;gap:18px;background:linear-gradient(135deg,rgba(229,9,20,.14),rgba(229,9,20,.04));border:1px solid rgba(229,9,20,.3);border-radius:var(--radius);padding:18px 22px;margin-bottom:14px}
+  .code .n{font-size:34px;font-weight:700;letter-spacing:3px;direction:ltr;color:#fff;font-family:Consolas,'Courier New',monospace}
+  .code .t{font-size:14px;color:var(--muted)}
+  .code .t b{color:#fff}
+  .steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}
+  .step{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px}
+  .step .num{width:28px;height:28px;border-radius:9px;background:rgba(229,9,20,.14);color:#ff5c66;font-weight:700;display:grid;place-items:center;font-size:14px}
+  .step .st{font-weight:600;margin-top:10px;font-size:15px}
+  .step .sd{font-size:13px;color:var(--muted);margin-top:4px}
+  .note{margin-top:12px;font-size:13px;color:var(--muted);background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 14px}
 
-  footer { text-align: center; padding: 48px 24px; color: var(--text-muted); font-size: 13px; border-top: 1px solid var(--border); line-height: 1.8; }
-  footer a { color: var(--red); text-decoration: none; }
-  footer a:hover { text-decoration: underline; }
+  /* ما الجديد */
+  .list{display:flex;flex-direction:column;gap:10px}
+  .item{display:flex;gap:14px;align-items:flex-start;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:15px 17px}
+  .ic{width:34px;height:34px;border-radius:9px;display:grid;place-items:center;flex-shrink:0}
+  .ic svg{width:18px;height:18px}
+  .body{flex:1;min-width:0}
+  .it{font-size:15px;font-weight:600;line-height:1.5}
+  .id{font-size:13px;color:var(--muted);margin-top:3px;line-height:1.7}
+  .pill{font-size:11px;font-weight:700;padding:2px 10px;border-radius:100px;flex-shrink:0;margin-top:3px}
+  .t-new .ic{background:rgba(229,9,20,.13);color:#ff5c66} .t-new .pill{background:rgba(229,9,20,.15);color:#ff6b75}
+  .t-fix .ic{background:rgba(16,185,129,.13);color:var(--green)} .t-fix .pill{background:rgba(16,185,129,.15);color:var(--green)}
+  .t-update .ic{background:rgba(59,130,246,.13);color:var(--blue)} .t-update .pill{background:rgba(59,130,246,.15);color:var(--blue)}
+  .t-design .ic{background:rgba(168,85,247,.13);color:var(--purple)} .t-design .pill{background:rgba(168,85,247,.15);color:var(--purple)}
 
-  @media (max-width: 600px) {
-    .app-name { font-size: 28px; }
-    .stats { flex-direction: column; }
-    .stat { border-left: none; border-top: 1px solid var(--border); }
-    .stat:first-child { border-top: none; }
-    .changelog-header { flex-direction: column; align-items: flex-start; }
+  details.old{margin-top:14px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius)}
+  details.old summary{cursor:pointer;padding:14px 18px;font-weight:600;list-style:none;display:flex;justify-content:space-between;gap:10px}
+  details.old summary::-webkit-details-marker{display:none}
+  details.old summary::after{content:'+';color:var(--muted);font-weight:400}
+  details.old[open] summary::after{content:'−'}
+  details.old .in{padding:0 18px 16px}
+  details.old ul{list-style:none;display:flex;flex-direction:column;gap:7px}
+  details.old li{font-size:13.5px;color:var(--muted);padding-right:14px;position:relative}
+  details.old li::before{content:'';position:absolute;right:0;top:10px;width:5px;height:5px;border-radius:50%;background:var(--faint)}
+
+  /* الصور */
+  .gallery{display:flex;gap:12px;overflow-x:auto;padding:4px 4px 12px;scroll-snap-type:x mandatory}
+  .shot{flex:0 0 min(78%,520px);scroll-snap-align:start;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;text-decoration:none}
+  .shot img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;background:#111}
+  .shot span{display:block;padding:9px 13px;font-size:13px;color:var(--muted)}
+
+  /* الأسئلة */
+  .faq details{background:var(--surface);border:1px solid var(--border);border-radius:12px;margin-bottom:8px}
+  .faq summary{cursor:pointer;padding:13px 17px;font-weight:600;font-size:15px;list-style:none;display:flex;justify-content:space-between;gap:12px}
+  .faq summary::-webkit-details-marker{display:none}
+  .faq summary::after{content:'+';color:var(--muted);font-weight:400;flex-shrink:0}
+  .faq details[open] summary::after{content:'−'}
+  .faq p{padding:0 17px 14px;color:var(--muted);font-size:14px;white-space:pre-line}
+
+  /* التواصل */
+  .contacts{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:18px}
+  .ct{display:flex;align-items:center;gap:14px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:15px 17px;text-decoration:none;transition:border-color .15s,background .15s}
+  .ct:hover,.ct:focus{border-color:var(--border2);background:var(--surface2)}
+  .ct .ci{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;flex-shrink:0}
+  .ct .cn{font-size:14px;font-weight:600}
+  .ct .ch{font-size:12px;color:var(--muted);direction:ltr;text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .ct .tx{flex:1;min-width:0}
+
+  .sha{margin-top:12px;font-size:11px;color:var(--faint);direction:ltr;word-break:break-all;text-align:center}
+  footer{text-align:center;padding:40px 20px;margin-top:50px;border-top:1px solid var(--border);color:var(--muted);font-size:13px}
+  footer .s{margin-top:4px;font-size:12px;color:var(--faint)}
+  .hide{display:none!important}
+  .skel{color:transparent!important;background:rgba(255,255,255,.06);border-radius:6px}
+
+  @media (max-width:640px){
+    h1{font-size:29px}
+    .stats{grid-template-columns:repeat(2,1fr)}
+    .stat:nth-child(2){border-left:none}
+    .stat:nth-child(-n+2){border-bottom:1px solid var(--border)}
+    .btn-dl{font-size:17px;padding:15px 28px}
+    .code{flex-direction:column;text-align:center;gap:6px}
   }
 </style>
 </head>
 <body>
 
-<div class="hero">
+<header class="hero">
   <div class="wrap">
-    <div class="logo-ring">
-      <img src="logo.png" width="80" height="80" style="border-radius: 20px;" alt="CineMax TV Logo">
-    </div>
-    <h1 class="app-name">CineMax TV</h1>
-    <div class="version-badge">الإصدار 2.0</div>
-    <p class="tagline">
-      تطبيق مشاهدة أفلام ومسلسلات مخصص لشاشات Android TV<br>
-      معتمد بالكامل على سيرفر سينمانا
-    </p>
-    <span class="disclaimer">هذا التطبيق غير رسمي ولا ينتمي لـ "شبكتي"</span>
+    <div class="logo"><img src="logo.png" alt="شعار CineMax TV" width="72" height="72"></div>
+    <h1>CineMax TV</h1>
+    <div class="ver" id="ver">الإصدار …</div>
+    <p class="tag">أفلام ومسلسلات على شاشة التلفاز، بواجهة مصممة للريموت<br>معتمد بالكامل على سيرفر سينمانا</p>
+    <span class="unofficial">تطبيق غير رسمي ولا ينتمي لـ "شبكتي"</span>
 
-    <div class="download-wrap">
-      <a href="CineMaxTV_v2.0.apk?v=2" class="btn-download" download>
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-          <polyline points="7 10 12 15 17 10"/>
-          <line x1="12" y1="15" x2="12" y2="3"/>
-        </svg>
-        تحميل التطبيق — v2.0
+    <div class="dl">
+      <a id="btnDl" class="btn-dl" href="CineMaxTV.apk" download autofocus>
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        <span id="dlText">تحميل التطبيق</span>
       </a>
-      <div style="margin-top: 12px; font-size: 14px; color: var(--text-muted); font-weight: 600;">
-        عدد مرات التحميل: <span id="download-count" style="color: var(--red);">جاري الحساب...</span>
-      </div>
+      <div class="dl-meta">عدد مرات التحميل: <b id="count">…</b></div>
+      <a id="prev" class="prev hide" href="#" download></a>
     </div>
 
     <div class="stats">
-      <div class="stat">
-        <div class="stat-val">Android TV</div>
-        <div class="stat-label">المنصة</div>
-      </div>
-      <div class="stat">
-        <div class="stat-val">Android 5+</div>
-        <div class="stat-label">المتطلبات</div>
-      </div>
-      <div class="stat">
-        <div class="stat-val">13.3 MB</div>
-        <div class="stat-label">الحجم</div>
-      </div>
-      <div class="stat">
-        <div class="stat-val">6/6/2026</div>
-        <div class="stat-label">آخر تحديث</div>
-      </div>
+      <div class="stat"><div class="v" id="sVer">…</div><div class="l">الإصدار</div></div>
+      <div class="stat"><div class="v" id="sSize">…</div><div class="l">الحجم</div></div>
+      <div class="stat"><div class="v" id="sReq">Android 5+</div><div class="l">المتطلبات</div></div>
+      <div class="stat"><div class="v" id="sDate">…</div><div class="l">آخر تحديث</div></div>
     </div>
   </div>
-</div>
+</header>
 
-<div class="wrap">
-  <div class="divider"></div>
+<main class="wrap">
 
-  <div class="section-label">ما الجديد</div>
-  <div class="changelog-header">
-    <h2 class="changelog-title">تحديث 2.0</h2>
-    <span class="release-date">6 يونيو 2026</span>
-  </div>
-
-  <div class="changelog-list">
-    <div class="cl-item">
-      <div class="cl-icon icon-new">⬇️</div>
-      <div class="cl-body">
-        <div class="cl-title">التحميل المُسبق</div>
-        <div class="cl-desc">ميزة جديدة تُحمّل جزءاً من الفيديو مسبقاً قبل التشغيل، مما يُقلّل التقطيع عند ضعف الاتصال أو بطء السيرفر. يمكن تفعيلها والتحكم في حجمها من إعدادات المشغل.</div>
-      </div>
-      <span class="cl-tag tag-new">جديد</span>
+  <section id="install">
+    <div class="lbl">التثبيت</div>
+    <h2>ثبّته على التلفاز في دقيقة</h2>
+    <p class="sub">أسهل طريقة عبر تطبيق Downloader المجاني من متجر التلفاز</p>
+    <div style="height:16px"></div>
+    <div class="code hide" id="codeBox">
+      <div class="n" id="codeNum"></div>
+      <div class="t">افتح <b>Downloader</b> على التلفاز، واكتب هذا الرمز في خانة الرابط ثم اضغط <b>Go</b> — تفتح هذه الصفحة مباشرة.</div>
     </div>
-    <div class="cl-item">
-      <div class="cl-icon icon-new">🔍</div>
-      <div class="cl-body">
-        <div class="cl-title">صفحة بحث محدّثة بالكامل</div>
-        <div class="cl-desc">إمكانية التبديل بين البحث في سينمانا والبحث في CEE، مع تحديث شامل لشكل الصفحة وطريقة عرض النتائج.</div>
-      </div>
-      <span class="cl-tag tag-new">جديد</span>
+    <div class="steps">
+      <div class="step"><div class="num">1</div><div class="st">ثبّت Downloader</div><div class="sd">من متجر Google Play على التلفاز، ابحث عن Downloader (أيقونة برتقالية).</div></div>
+      <div class="step"><div class="num">2</div><div class="st">افتح هذه الصفحة</div><div class="sd">اكتب رمز هذه الصفحة، أو رابطها، في خانة Downloader ثم اضغط Go.</div></div>
+      <div class="step"><div class="num">3</div><div class="st">اضغط «تحميل التطبيق»</div><div class="sd">إن طُلب منك، اسمح لـ Downloader بتثبيت التطبيقات من مصادر غير معروفة.</div></div>
+      <div class="step"><div class="num">4</div><div class="st">ثبّت وابدأ</div><div class="sd">اضغط «تثبيت» ثم «فتح». يظهر التطبيق بعدها في قائمة تطبيقات التلفاز.</div></div>
     </div>
-    <div class="cl-item">
-      <div class="cl-icon icon-fix">🕓</div>
-      <div class="cl-body">
-        <div class="cl-title">إصلاح سجل المشاهدة</div>
-        <div class="cl-desc">إعادة تحميل تلقائية عند فشل جلب الأعمال، إمكانية التمرير للأسفل لعرض الأعمال القديمة، وإضافة تاريخ المشاهدة لكل عمل.</div>
-      </div>
-      <span class="cl-tag tag-fix">إصلاح</span>
+    <div class="note"><b style="color:#fff">للتحديث:</b> ثبّت النسخة الجديدة فوق القديمة مباشرة، دون حذفها — يبقى سجل مشاهدتك وحسابك وإعداداتك كما هي. والتطبيق نفسه يخبرك عند صدور إصدار جديد.</div>
+  </section>
+
+  <section id="news">
+    <div class="head">
+      <div><div class="lbl">ما الجديد</div><h2 id="newsTitle">آخر التحديثات</h2></div>
+      <span class="date" id="newsDate"></span>
     </div>
-    <div class="cl-item">
-      <div class="cl-icon icon-new">🟣</div>
-      <div class="cl-body">
-        <div class="cl-title">تمييز مشاهد الرقابة العائلية على شريط التقدم</div>
-        <div class="cl-desc">تُميَّز المشاهد الخاضعة للرقابة بلون بنفسجي على شريط التقدم لمعرفة موضعها مسبقاً.</div>
-      </div>
-      <span class="cl-tag tag-new">جديد</span>
+    <div class="list" id="changes"></div>
+    <div id="history"></div>
+  </section>
+
+  <section id="shots" class="hide">
+    <div class="lbl">من داخل التطبيق</div>
+    <h2>صور من التطبيق</h2>
+    <div style="height:16px"></div>
+    <div class="gallery" id="gallery"></div>
+  </section>
+
+  <section id="faqSec">
+    <div class="lbl">أسئلة شائعة</div>
+    <h2>قبل أن تسأل</h2>
+    <div style="height:16px"></div>
+    <div class="faq" id="faq"></div>
+  </section>
+
+  <section id="contact">
+    <div class="lbl">تواصل معنا</div>
+    <h2>اقتراح أو مشكلة؟</h2>
+    <p class="sub">نرحب بأي ملاحظة — وإن ظهر لك رمز عطل في التطبيق أرسله لنا</p>
+    <div class="contacts">
+      <a class="ct" href="https://t.me/Yousif313" target="_blank" rel="noopener">
+        <div class="ci" style="background:rgba(37,167,218,.14)"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="12" fill="#25A8DA"/><path d="M5.5 11.8L17 7l-2.5 11-3.2-2.8-1.5 1.4V14l5.5-5.2-6.8 4.2L5.5 11.8z" fill="#fff"/></svg></div>
+        <div class="tx"><div class="cn">تيليغرام</div><div class="ch">@Yousif313</div></div>
+      </a>
+      <a class="ct" href="https://t.me/c1nemaxtv" target="_blank" rel="noopener">
+        <div class="ci" style="background:rgba(37,167,218,.08);border:1px solid rgba(37,167,218,.22)"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="12" fill="#1a7fa8"/><path d="M5.5 11.8L17 7l-2.5 11-3.2-2.8-1.5 1.4V14l5.5-5.2-6.8 4.2L5.5 11.8z" fill="#fff"/></svg></div>
+        <div class="tx"><div class="cn">قناة التطبيق</div><div class="ch">@C1nemaxtv</div></div>
+      </a>
+      <a class="ct" href="https://www.instagram.com/y3.1.3/" target="_blank" rel="noopener">
+        <div class="ci" style="background:rgba(225,48,108,.12)"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><defs><radialGradient id="ig" cx="30%" cy="107%" r="150%"><stop offset="0%" stop-color="#fdf497"/><stop offset="5%" stop-color="#fdf497"/><stop offset="45%" stop-color="#fd5949"/><stop offset="60%" stop-color="#d6249f"/><stop offset="90%" stop-color="#285AEB"/></radialGradient></defs><rect x="2" y="2" width="20" height="20" rx="6" fill="url(#ig)"/><circle cx="12" cy="12" r="4.5" stroke="#fff" stroke-width="1.8" fill="none"/><circle cx="17" cy="7" r="1.2" fill="#fff"/></svg></div>
+        <div class="tx"><div class="cn">إنستغرام</div><div class="ch">@y3.1.3</div></div>
+      </a>
+      <a class="ct" href="mailto:yousif31355@gmail.com">
+        <div class="ci" style="background:rgba(255,255,255,.06)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg></div>
+        <div class="tx"><div class="cn">البريد الإلكتروني</div><div class="ch">yousif31355@gmail.com</div></div>
+      </a>
     </div>
-    <div class="cl-item">
-      <div class="cl-icon icon-fix">📋</div>
-      <div class="cl-body">
-        <div class="cl-title">إصلاح قوائمي</div>
-        <div class="cl-desc">تعرض الأعمال الموجودة في قوائمك الشخصية حتى حين يفشل سيرفر سينمانا.</div>
-      </div>
-      <span class="cl-tag tag-fix">إصلاح</span>
-    </div>
-    <div class="cl-item">
-      <div class="cl-icon icon-fix">🖼️</div>
-      <div class="cl-body">
-        <div class="cl-title">إصلاح جلب معلومات العمل وخلفيته</div>
-        <div class="cl-desc">منطق محسّن لجلب معلومات العمل واللوغو والخلفية، أصبحت الأخطاء نادرة جداً.</div>
-      </div>
-      <span class="cl-tag tag-fix">إصلاح</span>
-    </div>
-    <div class="cl-item">
-      <div class="cl-icon icon-update">🌐</div>
-      <div class="cl-body">
-        <div class="cl-title">إضافة لغة العمل في كبسولات المعلومات</div>
-        <div class="cl-desc">تظهر لغة المسلسل أو الفيلم ضمن كبسولات المعلومات بجانب البوستر.</div>
-      </div>
-      <span class="cl-tag tag-update">تحسين</span>
-    </div>
-    <div class="cl-item">
-      <div class="cl-icon icon-update">✅</div>
-      <div class="cl-body">
-        <div class="cl-title">تسجيل الحلقات السابقة كمشاهَدة</div>
-        <div class="cl-desc">إمكانية تسجيل جميع الحلقات السابقة في المسلسل كـ "تمت مشاهدتها" عند البدء من منتصف المسلسل.</div>
-      </div>
-      <span class="cl-tag tag-update">تحسين</span>
-    </div>
-    <div class="cl-item">
-      <div class="cl-icon icon-design">🎨</div>
-      <div class="cl-body">
-        <div class="cl-title">تحديثات بصرية متعددة</div>
-        <div class="cl-desc">تحديث شكل الأعمال المميزة، وأقسامي بصور تمثل كل قسم، وزر التخطي، واختيار المواسم، وتعديلات CEE.</div>
-      </div>
-      <span class="cl-tag tag-design">تصميم</span>
-    </div>
-    <div class="cl-item">
-      <div class="cl-icon icon-fix">💬</div>
-      <div class="cl-body">
-        <div class="cl-title">تحسينات الترجمة والتنقل</div>
-        <div class="cl-desc">إصلاح تنسيقات ألوان الترجمة، وإصلاح زر التنقل بين حلقات المواسم، وإضافة خط Adobe Arabic Regular.</div>
-      </div>
-      <span class="cl-tag tag-fix">إصلاح</span>
-    </div>
-  </div>
-
-  <div class="divider"></div>
-
-  <div class="section-label">تواصل معنا</div>
-  <h2 style="font-size:22px; font-weight:700; margin-bottom:6px;">اقتراح أو تعديل؟</h2>
-  <p style="color:var(--text-muted); font-size:14px; margin-bottom:0;">نرحب بأي ملاحظة أو اقتراح لتحسين التطبيق</p>
-
-  <div class="contact-grid">
-
-    <a href="https://t.me/Yousif313" target="_blank" class="contact-card">
-      <div class="contact-icon" style="background:rgba(37,167,218,0.15);">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-          <circle cx="12" cy="12" r="12" fill="#25A8DA"/>
-          <path d="M5.5 11.8L17 7l-2.5 11-3.2-2.8-1.5 1.4V14l5.5-5.2-6.8 4.2L5.5 11.8z" fill="white"/>
-        </svg>
-      </div>
-      <div class="contact-info">
-        <div class="contact-name">تيليغرام</div>
-        <div class="contact-handle">@Yousif313</div>
-      </div>
-      <span class="contact-arrow">↗</span>
-    </a>
-
-    <a href="https://t.me/c1nemaxtv" target="_blank" class="contact-card">
-      <div class="contact-icon" style="background:rgba(37,167,218,0.08); border:1px solid rgba(37,167,218,0.2);">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-          <circle cx="12" cy="12" r="12" fill="#1a7fa8"/>
-          <path d="M5.5 11.8L17 7l-2.5 11-3.2-2.8-1.5 1.4V14l5.5-5.2-6.8 4.2L5.5 11.8z" fill="white"/>
-          <circle cx="17.5" cy="6.5" r="3" fill="#E50914" stroke="#0a0a0a" stroke-width="1"/>
-          <text x="17.5" y="9" text-anchor="middle" fill="white" font-size="4" font-weight="bold">ch</text>
-        </svg>
-      </div>
-      <div class="contact-info">
-        <div class="contact-name">قناة التطبيق</div>
-        <div class="contact-handle">@C1nemaxtv</div>
-      </div>
-      <span class="contact-arrow">↗</span>
-    </a>
-
-    <a href="https://www.instagram.com/y3.1.3/" target="_blank" class="contact-card">
-      <div class="contact-icon" style="background:rgba(225,48,108,0.12);">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-          <defs>
-            <radialGradient id="ig1" cx="30%" cy="107%" r="150%">
-              <stop offset="0%" stop-color="#fdf497"/>
-              <stop offset="5%" stop-color="#fdf497"/>
-              <stop offset="45%" stop-color="#fd5949"/>
-              <stop offset="60%" stop-color="#d6249f"/>
-              <stop offset="90%" stop-color="#285AEB"/>
-            </radialGradient>
-          </defs>
-          <rect x="2" y="2" width="20" height="20" rx="6" fill="url(#ig1)"/>
-          <rect x="2" y="2" width="20" height="20" rx="6" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="0.5"/>
-          <circle cx="12" cy="12" r="4.5" stroke="white" stroke-width="1.8" fill="none"/>
-          <circle cx="17" cy="7" r="1.2" fill="white"/>
-        </svg>
-      </div>
-      <div class="contact-info">
-        <div class="contact-name">إنستغرام</div>
-        <div class="contact-handle">@y3.1.3</div>
-      </div>
-      <span class="contact-arrow">↗</span>
-    </a>
-
-    <a href="mailto:yousif31355@gmail.com" class="contact-card">
-      <div class="contact-icon" style="background:rgba(255,255,255,0.06);">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-          <rect x="2" y="4" width="20" height="16" rx="2" fill="white"/>
-          <path d="M2 6l10 7 10-7" stroke="none"/>
-          <path d="M2 7l4 3-4 9V7z" fill="#4285F4"/>
-          <path d="M22 7l-4 3 4 9V7z" fill="#34A853"/>
-          <path d="M18 10l-6 4-6-4L2 7h20l-4 3z" fill="#EA4335"/>
-          <path d="M6 10l6 4 6-4 4 9H2l4-9z" fill="#FBBC04"/>
-          <path d="M6 10l6 4 6-4" fill="#EA4335"/>
-        </svg>
-      </div>
-      <div class="contact-info">
-        <div class="contact-name">البريد الإلكتروني</div>
-        <div class="contact-handle">yousif31355@gmail.com</div>
-      </div>
-      <span class="contact-arrow">↗</span>
-    </a>
-
-  </div>
-
-  <div class="divider"></div>
-</div>
+    <div class="sha hide" id="sha"></div>
+  </section>
+</main>
 
 <footer>
-  <p>CineMax TV &mdash; جميع الحقوق محفوظة &copy; 2026</p>
-  <p style="margin-top:6px; font-size:12px; color:rgba(255,255,255,0.25);">
-    هذا التطبيق غير رسمي ولا ينتمي لـ "شبكتي"
-  </p>
+  <div>CineMax TV &mdash; جميع الحقوق محفوظة &copy; <span id="year">2026</span></div>
+  <div class="s">تطبيق غير رسمي ولا ينتمي لـ "شبكتي". لا نستضيف أي محتوى.</div>
 </footer>
 
 <script>
-  document.addEventListener("DOMContentLoaded", function() {
-    const countSpan = document.getElementById("download-count");
-    const downloadBtn = document.querySelector(".btn-download");
+(function(){
+  'use strict';
+  var $ = function(id){ return document.getElementById(id); };
+  var NS = 'CineMaxTV_Yousifer7';
+  var ICONS = {
+    'new':    '<path d="M12 3l2.4 5.2 5.6.6-4.2 3.8 1.2 5.6L12 15.4 7 18.2l1.2-5.6L4 8.8l5.6-.6z"/>',
+    'fix':    '<path d="M20 6L9 17l-5-5"/>',
+    'update': '<path d="M12 19V5M5 12l7-7 7 7"/>',
+    'design': '<circle cx="12" cy="12" r="9"/><circle cx="8.5" cy="10" r="1.2"/><circle cx="12" cy="7.5" r="1.2"/><circle cx="15.5" cy="10" r="1.2"/>'
+  };
+  var TAGS = { 'new':'جديد', 'fix':'إصلاح', 'update':'تحسين', 'design':'تصميم' };
+  var FAQ = [
+    ['هل التطبيق مجاني؟', 'نعم، مجاني بالكامل.'],
+    ['هل أحتاج حساباً في سينمانا؟', 'لا للمشاهدة. الحساب يفيد في مزامنة سجل المشاهدة وقوائمك (المفضلة وأشاهده لاحقاً) مع موقع سينمانا.'],
+    ['على أي أجهزة يعمل؟', 'أجهزة Android TV وGoogle TV وأجهزة TV Box بأندرويد 5 فأحدث. واجهته مصممة للريموت، فاستعماله على الهاتف ليس مريحاً.'],
+    ['الأعمال لا تظهر أو التشغيل لا يبدأ، ما الحل؟', 'غالباً المشكلة من سيرفر سينمانا أو من الاتصال. رسالة الخطأ في التطبيق تبيّن المصدر. انتظر قليلاً ثم أعد المحاولة، وإن استمرت راسلنا.'],
+    ['ظهر لي رمز بعد توقف التطبيق، ماذا أفعل؟', 'أرسل الرمز لنا على تيليغرام. تجده أيضاً في: الإعدادات ← النظام ← سجل الأعطال.'],
+    ['كيف أحدّث التطبيق؟', 'يظهر لك إشعار داخل التطبيق عند صدور تحديث. حمّل النسخة الجديدة من هذه الصفحة وثبّتها فوق القديمة — لن تفقد شيئاً.']
+  ];
 
-    const namespace = "CineMaxTV_Yousifer7";
-    const key = "apk_downloads";
+  function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+  function fmtDate(s){
+    if(!s) return '';
+    var d = new Date(s + 'T12:00:00'); if(isNaN(d)) return s;
+    var m = ['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+    return d.getDate() + ' ' + m[d.getMonth()] + ' ' + d.getFullYear();
+  }
+  function shortDate(s){
+    var d = new Date((s||'') + 'T12:00:00'); if(isNaN(d)) return s || '…';
+    return d.getDate() + '/' + (d.getMonth()+1) + '/' + d.getFullYear();
+  }
 
-    fetch(`https://api.counterapi.dev/v1/${namespace}/${key}`)
-      .then(response => response.json())
-      .then(data => {
-        countSpan.innerText = data.count || 0;
-      })
-      .catch(error => {
-        countSpan.innerText = "غير متوفر";
-      });
+  function item(c){
+    var t = ICONS[c.type] ? c.type : 'new';
+    return '<div class="item t-' + t + '"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + ICONS[t] + '</svg></div>' +
+      '<div class="body"><div class="it">' + esc(c.title) + '</div>' + (c.desc ? '<div class="id">' + esc(c.desc) + '</div>' : '') + '</div>' +
+      '<span class="pill">' + TAGS[t] + '</span></div>';
+  }
 
-    downloadBtn.addEventListener("click", function() {
-      fetch(`https://api.counterapi.dev/v1/${namespace}/${key}/up`)
-        .then(response => response.json())
-        .then(data => {
-          countSpan.innerText = data.count;
-        });
+  function render(d){
+    var v = d.version_name || '';
+    var code = d.version_code || '';
+    var apk = (d.apk || 'CineMaxTV.apk') + (code ? '?v=' + code : '');
+    $('ver').textContent = 'الإصدار ' + (v || '…');
+    $('btnDl').href = apk;
+    $('dlText').textContent = 'تحميل التطبيق' + (v ? ' — v' + v : '');
+    $('sVer').textContent = v || '—';
+    $('sSize').textContent = d.size_mb ? d.size_mb + ' MB' : '—';
+    $('sReq').textContent = d.min_android || 'Android 5+';
+    $('sDate').textContent = shortDate(d.date);
+    if(d.date) $('year').textContent = String(d.date).slice(0,4);
+
+    if(d.previous_apk && d.previous_version){
+      var p = $('prev'); p.href = d.previous_apk; p.textContent = 'تحتاج الإصدار السابق ' + d.previous_version + '؟';
+      p.classList.remove('hide');
+    }
+    if(d.downloader_code){ $('codeNum').textContent = d.downloader_code; $('codeBox').classList.remove('hide'); }
+
+    $('newsTitle').textContent = v ? 'تحديث ' + v : 'آخر التحديثات';
+    $('newsDate').textContent = fmtDate(d.date);
+    $('newsDate').classList.toggle('hide', !d.date);
+    var ch = d.changes || [];
+    $('changes').innerHTML = ch.length ? ch.map(item).join('') : '<div class="note">لا توجد تفاصيل لهذا الإصدار.</div>';
+
+    var h = (d.history || []).filter(function(x){ return x && x.changes && x.changes.length; });
+    $('history').innerHTML = h.map(function(x){
+      return '<details class="old"><summary><span>الإصدار ' + esc(x.version_name || '') + '</span><span style="color:var(--muted);font-weight:400;font-size:13px">' + esc(fmtDate(x.date)) + '</span></summary>' +
+        '<div class="in"><ul>' + x.changes.map(function(c){ return '<li>' + esc(c.title) + '</li>'; }).join('') + '</ul></div></details>';
+    }).join('');
+
+    var shots = (d.shots || []).filter(function(s){ return s && s.src; });
+    if(shots.length){
+      $('gallery').innerHTML = shots.map(function(s){
+        return '<a class="shot" href="' + esc(s.src) + '" target="_blank" rel="noopener"><img loading="lazy" src="' + esc(s.src) + '" alt="' + esc(s.caption || 'صورة من التطبيق') + '">' + (s.caption ? '<span>' + esc(s.caption) + '</span>' : '') + '</a>';
+      }).join('');
+      $('shots').classList.remove('hide');
+    }
+
+    var faq = (d.faq && d.faq.length) ? d.faq.map(function(x){ return [x.q, x.a]; }) : FAQ;
+    $('faq').innerHTML = faq.map(function(x){ return '<details><summary>' + esc(x[0]) + '</summary><p>' + esc(x[1]) + '</p></details>'; }).join('');
+
+    if(d.sha256){ $('sha').textContent = 'SHA-256 (v' + v + '): ' + d.sha256; $('sha').classList.remove('hide'); }
+
+    counter(code);
+  }
+
+  // عدّاد التحميل: الإجمالي + هذا الإصدار
+  function counter(code){
+    var get = function(key){ return fetch('https://api.counterapi.dev/v1/' + NS + '/' + key).then(function(r){ return r.json(); }); };
+    get('apk_downloads').then(function(x){ $('count').textContent = (x && x.count) || 0; })
+      .catch(function(){ $('count').textContent = '—'; });
+    $('btnDl').addEventListener('click', function(){
+      var up = function(key){ try{ return fetch('https://api.counterapi.dev/v1/' + NS + '/' + key + '/up', { keepalive:true }); }catch(e){ return Promise.reject(e); } };
+      up('apk_downloads').then(function(r){ return r.json(); }).then(function(x){ if(x && x.count) $('count').textContent = x.count; }).catch(function(){});
+      if(code) up('apk_v' + code).catch(function(){});
     });
-  });
+  }
+
+  // البيانات من site.json (يُحدَّث من لوحة CineMax Admin) — وإن تعذّر يبقى زر التحميل يعمل
+  fetch('site.json?t=' + Date.now(), { cache:'no-store' })
+    .then(function(r){ if(!r.ok) throw 0; return r.json(); })
+    .then(render)
+    .catch(function(){ render({}); });
+
+  // التركيز على زر التحميل فوراً (لتطبيق Downloader والريموت)
+  setTimeout(function(){ try{ $('btnDl').focus({ preventScroll:true }); }catch(e){ $('btnDl').focus(); } }, 300);
+})();
 </script>
 </body>
 </html>
