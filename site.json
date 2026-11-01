@@ -1,11 +1,11 @@
 {
   "version_name": "3.0",
   "version_code": 4,
-  "date": "",
-  "size_mb": "",
+  "date": "2026-11-01",
+  "size_mb": "13.8",
   "min_android": "Android 5+",
-  "apk": "CineMaxTV_v2.0.apk",
-  "sha256": "",
+  "apk": "CineMaxTV.apk",
+  "sha256": "644b231b454417154c433006c1efd83a2ada937ca0387154eabab9ed90c47273",
   "downloader_code": "",
   "changes": [
     {
