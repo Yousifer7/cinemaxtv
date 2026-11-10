@@ -327,18 +327,32 @@
 
     if(d.sha256){ $('sha').textContent = 'SHA-256 (v' + v + '): ' + d.sha256; $('sha').classList.remove('hide'); }
 
-    counter(code);
+    counter(code, d);
   }
 
-  // عدّاد التحميل: الإجمالي + هذا الإصدار
-  function counter(code){
-    var get = function(key){ return fetch('https://api.counterapi.dev/v1/' + NS + '/' + key).then(function(r){ return r.json(); }); };
-    get('apk_downloads').then(function(x){ $('count').textContent = (x && x.count) || 0; })
-      .catch(function(){ $('count').textContent = '—'; });
+  // عدّاد التحميل (Supabase — الرابط والمفتاح العام من site.json، تضبطهما لوحة CineMax Admin)
+  // المفتاح العام يستطيع «إضافة تحميل» وقراءة «العدد» فقط. الضغطات المتكررة في نفس الزيارة تُحسب مرة واحدة.
+  function counter(code, d){
+    var url = d && d.stats_url, key = d && d.stats_key;
+    if(!url || !key){ $('count').textContent = '—'; return; }
+    url = String(url).replace(/\/+$/, '');
+    var H = { 'apikey': key, 'Content-Type': 'application/json' };   // مفاتيح Supabase الجديدة: apikey فقط
+    var show = function(){
+      fetch(url + '/rest/v1/rpc/cmx_download_count', { method:'POST', headers:H, body:'{}', cache:'no-store' })
+        .then(function(r){ if(!r.ok) throw 0; return r.json(); })
+        .then(function(n){ $('count').textContent = Number(n || 0).toLocaleString('en-US'); })
+        .catch(function(){ $('count').textContent = '—'; });
+    };
+    show();
     $('btnDl').addEventListener('click', function(){
-      var up = function(key){ try{ return fetch('https://api.counterapi.dev/v1/' + NS + '/' + key + '/up', { keepalive:true }); }catch(e){ return Promise.reject(e); } };
-      up('apk_downloads').then(function(r){ return r.json(); }).then(function(x){ if(x && x.count) $('count').textContent = x.count; }).catch(function(){});
-      if(code) up('apk_v' + code).catch(function(){});
+      var once = 'cmx_dl_' + (code || 0);
+      try{ if(sessionStorage.getItem(once)) return; sessionStorage.setItem(once, '1'); }catch(e){}
+      var h = {}; for(var k in H) h[k] = H[k]; h['Prefer'] = 'return=minimal';
+      try{
+        fetch(url + '/rest/v1/downloads', { method:'POST', headers:h, keepalive:true,
+          body: JSON.stringify({ version_code: code ? Number(code) : null }) })
+          .then(function(){ setTimeout(show, 600); }).catch(function(){});
+      }catch(e){}
     });
   }
 
