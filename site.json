@@ -197,54 +197,104 @@
   ],
   "shots": [
     {
-      "src": "shots/mwlz98n70.jpg",
+      "src": "shots/mwlzk4g80.jpg",
       "caption": "إعدادات الترجمة مع معاينة مباشرة",
       "section": "الإعدادات"
     },
     {
-      "src": "shots/mwlz9b9s1.jpg",
+      "src": "shots/mwlzk5di1.jpg",
       "caption": "إعدادات المشغّل",
       "section": "الإعدادات"
     },
     {
-      "src": "shots/mwlz9c3d2.jpg",
+      "src": "shots/mwlzk66l2.jpg",
       "caption": "صفحة الأقسام الجديدة",
       "section": "الأقسام"
     },
     {
-      "src": "shots/mwlz9d1d3.jpg",
+      "src": "shots/mwlzk73z3.jpg",
       "caption": "قوائم CEE المختارة",
       "section": "الأقسام"
     },
     {
-      "src": "shots/mwlz9dzl4.jpg",
+      "src": "shots/mwlzk7x94.jpg",
       "caption": "بحث سريع في سينمانا مع سجل البحث",
       "section": "البحث"
     },
     {
-      "src": "shots/mwlz9f465.jpg",
+      "src": "shots/mwlzk8y35.jpg",
       "caption": "البحث في سيرفر CEE بضغطة واحدة",
       "section": "البحث"
     },
     {
-      "src": "shots/mwlz9g1h6.jpg",
+      "src": "shots/mwlzk9z26.jpg",
       "caption": "الصفحة الرئيسية والقائمة الجانبية",
       "section": "الرئيسية"
     },
     {
-      "src": "shots/mwlz9h5f7.jpg",
+      "src": "shots/mwlzkb067.jpg",
       "caption": "بطاقة «تابع المشاهدة» عند فتح التطبيق",
       "section": "الرئيسية"
     },
     {
-      "src": "shots/mwlz9i3g8.jpg",
+      "src": "shots/mwlzkby58.jpg",
       "caption": "الأفلام، أحدث الإصدارات ومجموعات مختارة",
       "section": "الرئيسية"
     },
     {
-      "src": "shots/mwlz9jdv9.jpg",
+      "src": "shots/mwlzkcwm9.jpg",
       "caption": "المسلسلات المميزة والأكثر شعبية",
       "section": "الرئيسية"
+    },
+    {
+      "src": "shots/mwlzkduq10.jpg",
+      "caption": "المشغّل مع زر تخطي المقدمة",
+      "section": "المشغّل"
+    },
+    {
+      "src": "shots/mwlzkf4811.jpg",
+      "caption": "قائمة الحلقات داخل المشغّل بأوقاتها",
+      "section": "المشغّل"
+    },
+    {
+      "src": "shots/mwlzkg5412.jpg",
+      "caption": "اختيار الترجمة أثناء المشاهدة",
+      "section": "المشغّل"
+    },
+    {
+      "src": "shots/mwlzkh3613.jpg",
+      "caption": "صفحة الفيلم، التقييمات والقصة وزر المشاهدة",
+      "section": "صفحة العمل"
+    },
+    {
+      "src": "shots/mwlzki7014.jpg",
+      "caption": "طاقم العمل وأعمال قد تعجبك",
+      "section": "صفحة العمل"
+    },
+    {
+      "src": "shots/mwlzkj5615.jpg",
+      "caption": "صفحة المسلسل بتصميمها الجديد",
+      "section": "صفحة العمل"
+    },
+    {
+      "src": "shots/mwlzkk3816.jpg",
+      "caption": "الحلقات بصورها ومدتها وقصتها",
+      "section": "صفحة العمل"
+    },
+    {
+      "src": "shots/mwlzkl1j17.jpg",
+      "caption": "انتقال سريع لأي حلقة في المسلسلات الطويلة",
+      "section": "صفحة العمل"
+    },
+    {
+      "src": "shots/mwlzklza18.jpg",
+      "caption": "المفضلة والمشاهدة لاحقاً",
+      "section": "مكتبتي"
+    },
+    {
+      "src": "shots/mwlzkmxp19.jpg",
+      "caption": "التحميلات للمشاهدة بلا إنترنت",
+      "section": "مكتبتي"
     }
   ],
   "faq": [],
@@ -255,7 +305,10 @@
   "shot_sections": [
     "الرئيسية",
     "البحث",
+    "صفحة العمل",
+    "المشغّل",
     "الأقسام",
+    "مكتبتي",
     "الإعدادات"
   ]
 }
