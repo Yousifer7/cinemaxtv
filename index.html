@@ -102,11 +102,52 @@
   details.old li{font-size:13.5px;color:var(--muted);padding-right:14px;position:relative}
   details.old li::before{content:'';position:absolute;right:0;top:10px;width:5px;height:5px;border-radius:50%;background:var(--faint)}
 
-  /* الصور */
-  .gallery{display:flex;gap:12px;overflow-x:auto;padding:4px 4px 12px;scroll-snap-type:x mandatory}
-  .shot{flex:0 0 min(78%,520px);scroll-snap-align:start;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;text-decoration:none}
-  .shot img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;background:#111}
-  .shot span{display:block;padding:9px 13px;font-size:13px;color:var(--muted)}
+  /* ── جولة في التطبيق: أقسام بالأعلى، وصور القسم تحتها ── */
+  .tabs{display:flex;gap:8px;overflow-x:auto;padding:4px 2px 14px;margin:0 -2px;scrollbar-width:none;-webkit-overflow-scrolling:touch;scroll-snap-type:x proximity}
+  .tabs::-webkit-scrollbar{display:none}
+  .tab{flex:0 0 auto;scroll-snap-align:start;display:inline-flex;align-items:center;gap:8px;font:inherit;font-size:14.5px;font-weight:600;color:var(--muted);background:var(--surface);border:1px solid var(--border);padding:9px 16px;border-radius:100px;cursor:pointer;transition:color .2s,background .25s,border-color .25s,transform .15s}
+  .tab:hover{color:#fff;border-color:var(--border2)}
+  .tab .n{font-size:11.5px;font-weight:700;min-width:20px;height:20px;padding:0 6px;border-radius:10px;display:inline-grid;place-items:center;background:rgba(255,255,255,.08);color:var(--muted);transition:background .25s,color .25s}
+  .tab[aria-selected="true"]{color:#fff;background:var(--red);border-color:var(--red);box-shadow:0 6px 22px -8px rgba(229,9,20,.7)}
+  .tab[aria-selected="true"] .n{background:rgba(255,255,255,.22);color:#fff}
+  .tab:active{transform:scale(.97)}
+
+  .stage{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:10px;box-shadow:0 30px 60px -30px rgba(0,0,0,.8)}
+  .screen{position:relative;aspect-ratio:16/9;border-radius:11px;overflow:hidden;background:#0d0d0d;cursor:zoom-in;outline:none;touch-action:pan-y}
+  .screen img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transform:scale(1.015);transition:opacity .45s ease,transform .6s ease}
+  .screen img.on{opacity:1;transform:none}
+  .screen:focus-visible{box-shadow:0 0 0 3px #fff}
+  .screen .spin{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none;opacity:0;transition:opacity .2s}
+  .screen.loading .spin{opacity:1}
+  .spin i{width:30px;height:30px;border-radius:50%;border:3px solid rgba(255,255,255,.15);border-top-color:var(--red);animation:sp .8s linear infinite}
+  @keyframes sp{to{transform:rotate(360deg)}}
+  .nav{position:absolute;top:50%;width:46px;height:46px;margin-top:-23px;border-radius:50%;border:1px solid rgba(255,255,255,.18);background:rgba(10,10,10,.62);color:#fff;display:grid;place-items:center;cursor:pointer;opacity:0;transition:opacity .2s,background .2s,transform .15s;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+  .nav svg{width:20px;height:20px}
+  .nav.prev{right:12px} .nav.next{left:12px}
+  .screen:hover .nav,.nav:focus,.screen:focus-within .nav{opacity:1}
+  .nav:hover,.nav:focus{background:var(--red);border-color:var(--red)}
+  .nav:active{transform:scale(.94)}
+  .nav[disabled]{display:none}
+  .meta{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 6px 4px}
+  .meta .c{font-size:14.5px;font-weight:500;min-height:22px;transition:opacity .25s}
+  .meta .i{font-size:12.5px;color:var(--muted);direction:ltr;flex-shrink:0;font-variant-numeric:tabular-nums}
+  .dots{display:none;justify-content:center;gap:6px;padding:4px 0 2px}
+  .dots b{width:6px;height:6px;border-radius:3px;background:rgba(255,255,255,.22);transition:width .3s,background .3s}
+  .dots b.on{width:18px;background:var(--red)}
+  .thumbs{display:flex;gap:8px;overflow-x:auto;padding:8px 2px 4px;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.15) transparent}
+  .thumb{flex:0 0 120px;aspect-ratio:16/9;border-radius:8px;overflow:hidden;border:2px solid transparent;padding:0;background:#111;cursor:pointer;opacity:.55;transition:opacity .2s,border-color .2s,transform .15s}
+  .thumb img{width:100%;height:100%;object-fit:cover;display:block}
+  .thumb:hover,.thumb:focus{opacity:1}
+  .thumb.on{opacity:1;border-color:var(--red)}
+
+  /* عرض بملء الشاشة */
+  .lb{position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.94);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;opacity:0;visibility:hidden;transition:opacity .25s,visibility .25s}
+  .lb.open{opacity:1;visibility:visible}
+  .lb img{max-width:100%;max-height:calc(100vh - 110px);border-radius:10px;box-shadow:0 20px 60px rgba(0,0,0,.6)}
+  .lb .lc{margin-top:14px;font-size:14px;color:var(--muted);text-align:center}
+  .lb .x{position:absolute;top:16px;left:16px;width:44px;height:44px;border-radius:50%;border:1px solid var(--border2);background:rgba(255,255,255,.06);color:#fff;font-size:20px;cursor:pointer}
+  .lb .x:hover,.lb .x:focus{background:var(--red);border-color:var(--red)}
+  .lb .nav{opacity:1;position:fixed}
 
   /* الأسئلة */
   .faq details{background:var(--surface);border:1px solid var(--border);border-radius:12px;margin-bottom:8px}
@@ -138,7 +179,18 @@
     .stat:nth-child(-n+2){border-bottom:1px solid var(--border)}
     .btn-dl{font-size:17px;padding:15px 28px}
     .code{flex-direction:column;text-align:center;gap:6px}
+    .stage{padding:6px;border-radius:14px}
+    .screen{border-radius:9px}
+    .nav{width:38px;height:38px;margin-top:-19px}
+    .nav.prev{right:8px} .nav.next{left:8px}
+    .thumbs{display:none}
+    .dots{display:flex}
+    .tab{font-size:13.5px;padding:8px 13px}
   }
+  /* شاشات اللمس: الأسهم ظاهرة دائماً (لا يوجد مرور فأرة) */
+  @media (hover:none){ .nav{opacity:.9} }
+  /* شاشات التلفاز والحاسوب الكبيرة: مساحة أوسع للصور */
+  @media (min-width:1200px){ #shots{margin-left:-90px;margin-right:-90px} .thumb{flex-basis:140px} }
 </style>
 </head>
 <body>
@@ -199,11 +251,30 @@
   </section>
 
   <section id="shots" class="hide">
-    <div class="lbl">من داخل التطبيق</div>
-    <h2>صور من التطبيق</h2>
-    <div style="height:16px"></div>
-    <div class="gallery" id="gallery"></div>
+    <div class="head">
+      <div><div class="lbl">من داخل التطبيق</div><h2>جولة في التطبيق</h2><p class="sub">اختر قسماً لترى صوره</p></div>
+    </div>
+    <div class="tabs" id="tourTabs" role="tablist" aria-label="أقسام التطبيق"></div>
+    <div class="stage">
+      <div class="screen" id="tourScreen" tabindex="0" role="group" aria-roledescription="عرض صور" aria-label="صور القسم — الأسهم للتنقل، Enter للتكبير">
+        <img id="tourA" alt=""><img id="tourB" alt="">
+        <div class="spin"><i></i></div>
+        <button class="nav prev" id="tourPrev" aria-label="الصورة السابقة"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg></button>
+        <button class="nav next" id="tourNext" aria-label="الصورة التالية"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg></button>
+      </div>
+      <div class="meta"><span class="c" id="tourCap"></span><span class="i" id="tourIdx"></span></div>
+      <div class="dots" id="tourDots" aria-hidden="true"></div>
+      <div class="thumbs" id="tourThumbs"></div>
+    </div>
   </section>
+
+  <div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="الصورة بحجم كامل">
+    <button class="x" id="lbX" aria-label="إغلاق">✕</button>
+    <button class="nav prev" id="lbPrev" aria-label="الصورة السابقة" style="right:16px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg></button>
+    <img id="lbImg" alt="">
+    <button class="nav next" id="lbNext" aria-label="الصورة التالية" style="left:16px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg></button>
+    <div class="lc" id="lbCap"></div>
+  </div>
 
   <section id="faqSec">
     <div class="lbl">أسئلة شائعة</div>
@@ -314,13 +385,7 @@
         '<div class="in"><ul>' + x.changes.map(function(c){ return '<li>' + esc(c.title) + '</li>'; }).join('') + '</ul></div></details>';
     }).join('');
 
-    var shots = (d.shots || []).filter(function(s){ return s && s.src; });
-    if(shots.length){
-      $('gallery').innerHTML = shots.map(function(s){
-        return '<a class="shot" href="' + esc(s.src) + '" target="_blank" rel="noopener"><img loading="lazy" src="' + esc(s.src) + '" alt="' + esc(s.caption || 'صورة من التطبيق') + '">' + (s.caption ? '<span>' + esc(s.caption) + '</span>' : '') + '</a>';
-      }).join('');
-      $('shots').classList.remove('hide');
-    }
+    tour(d);
 
     var faq = (d.faq && d.faq.length) ? d.faq.map(function(x){ return [x.q, x.a]; }) : FAQ;
     $('faq').innerHTML = faq.map(function(x){ return '<details><summary>' + esc(x[0]) + '</summary><p>' + esc(x[1]) + '</p></details>'; }).join('');
@@ -328,6 +393,132 @@
     if(d.sha256){ $('sha').textContent = 'SHA-256 (v' + v + '): ' + d.sha256; $('sha').classList.remove('hide'); }
 
     counter(code, d);
+  }
+
+  // ── جولة في التطبيق ──
+  // الصور من site.json: { src, caption, section } — section يحدده لوحة CineMax Admin. بلا section → «صور أخرى».
+  // الترتيب: shot_sections من site.json إن وُجدت، ثم الترتيب الافتراضي، ثم أي قسم جديد بحسب ظهوره.
+  var ORDER = ['الرئيسية','البحث','صفحة العمل','المشغّل','الأقسام','مكتبتي','الإعدادات'];
+  function tour(d){
+    var list = (d.shots || []).filter(function(s){ return s && s.src; });
+    if(!list.length) return;
+    var order = [].concat(d.shot_sections || [], ORDER), groups = [], byName = {};
+    list.forEach(function(s, n){
+      var name = String(s.section || '').trim() || 'صور أخرى';
+      if(!byName[name]){
+        var rank = order.indexOf(name); if(rank < 0) rank = 1000 + n;
+        byName[name] = { name:name, rank:rank, items:[] }; groups.push(byName[name]);
+      }
+      byName[name].items.push(s);
+    });
+    groups.sort(function(a, b){ return a.rank - b.rank; });
+
+    var tabsEl = $('tourTabs'), screen = $('tourScreen'), thumbs = $('tourThumbs'), dots = $('tourDots');
+    var layers = [$('tourA'), $('tourB')], front = 0, g = 0, i = 0, token = 0, started = false;
+    var smooth = 'scrollBehavior' in document.documentElement.style;
+
+    tabsEl.innerHTML = groups.map(function(gr, n){
+      return '<button class="tab" role="tab" id="tab' + n + '" aria-selected="false" data-g="' + n + '">' + esc(gr.name) + '<span class="n">' + gr.items.length + '</span></button>';
+    }).join('');
+    tabsEl.classList.toggle('hide', groups.length < 2);
+    tabsEl.addEventListener('click', function(e){
+      var b = e.target.closest ? e.target.closest('.tab') : null; if(!b) return;
+      var n = +b.getAttribute('data-g'); if(n !== g || !started) pick(n, 0);
+    });
+
+    function cur(){ return groups[g].items; }
+    function caption(s){ return s.caption || groups[g].name; }
+    function reveal(el){ if(!el) return; try{ if(smooth) el.scrollIntoView({ behavior:'smooth', block:'nearest', inline:'center' }); }catch(e){} }
+
+    function pick(n, k){
+      g = n; i = k; started = true;
+      Array.prototype.forEach.call(tabsEl.children, function(b, m){ b.setAttribute('aria-selected', m === g ? 'true' : 'false'); });
+      reveal(tabsEl.children[g]);
+      var items = cur();
+      thumbs.innerHTML = items.length > 1 ? items.map(function(s, m){
+        return '<button class="thumb" data-i="' + m + '" aria-label="' + esc(caption(s)) + '"><img loading="lazy" src="' + esc(s.src) + '" alt=""></button>';
+      }).join('') : '';
+      dots.innerHTML = items.length > 1 ? items.map(function(){ return '<b></b>'; }).join('') : '';
+      $('tourPrev').disabled = $('tourNext').disabled = items.length < 2;
+      show(k);
+    }
+
+    function show(k){
+      var items = cur(), n = items.length; i = (k % n + n) % n;
+      var s = items[i], my = ++token, back = layers[1 - front], top = layers[front];
+      var slow = setTimeout(function(){ if(my === token) screen.classList.add('loading'); }, 150);
+      back.onload = back.onerror = function(){
+        if(my !== token) return;
+        clearTimeout(slow); screen.classList.remove('loading');
+        back.classList.add('on'); top.classList.remove('on'); front = 1 - front;
+      };
+      back.alt = caption(s);
+      if(back.getAttribute('src') === s.src && back.complete) back.onload(); else back.src = s.src;
+      $('tourCap').textContent = caption(s);
+      $('tourIdx').textContent = n > 1 ? (i + 1) + ' / ' + n : '';
+      Array.prototype.forEach.call(thumbs.children, function(t, m){ t.classList.toggle('on', m === i); });
+      Array.prototype.forEach.call(dots.children, function(t, m){ t.classList.toggle('on', m === i); });
+      reveal(thumbs.children[i]);
+      // تجهيز الصورتين المجاورتين مسبقاً: التنقل فوري
+      [i + 1, i - 1].forEach(function(m){ var p = items[(m % n + n) % n]; if(p && p !== s){ var im = new Image(); im.src = p.src; } });
+      if($('lb').classList.contains('open')) lbFill();
+    }
+    function step(dir){ if(cur().length > 1) show(i + dir); }
+
+    thumbs.addEventListener('click', function(e){
+      var b = e.target.closest ? e.target.closest('.thumb') : null; if(b) show(+b.getAttribute('data-i'));
+    });
+    $('tourNext').addEventListener('click', function(e){ e.stopPropagation(); step(1); });
+    $('tourPrev').addEventListener('click', function(e){ e.stopPropagation(); step(-1); });
+
+    // اتجاه عربي: السهم الأيسر = التالية. Enter = تكبير
+    screen.addEventListener('keydown', function(e){
+      var k = e.key || e.keyCode;
+      if(k === 'ArrowLeft' || k === 37){ step(1); e.preventDefault(); }
+      else if(k === 'ArrowRight' || k === 39){ step(-1); e.preventDefault(); }
+      else if((k === 'Enter' || k === 13 || k === ' ') && e.target === screen){ lbOpen(); e.preventDefault(); }
+    });
+
+    // سحب باللمس (الهاتف): يميناً = التالية، يساراً = السابقة
+    var x0 = null, y0 = 0, swiped = false;
+    screen.addEventListener('touchstart', function(e){ var t = e.touches[0]; x0 = t.clientX; y0 = t.clientY; swiped = false; }, { passive:true });
+    screen.addEventListener('touchend', function(e){
+      if(x0 === null) return; var t = e.changedTouches[0], dx = t.clientX - x0, dy = t.clientY - y0; x0 = null;
+      if(Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.3){ swiped = true; step(dx > 0 ? 1 : -1); }
+    });
+    screen.addEventListener('click', function(e){
+      if(swiped){ swiped = false; return; }
+      if(e.target.closest && e.target.closest('.nav')) return;
+      lbOpen();
+    });
+
+    // ملء الشاشة
+    var lb = $('lb');
+    function lbFill(){ var s = cur()[i]; $('lbImg').src = s.src; $('lbImg').alt = caption(s); $('lbCap').textContent = caption(s) + (cur().length > 1 ? '  ·  ' + (i + 1) + ' / ' + cur().length : ''); }
+    function lbOpen(){ lbFill(); lb.classList.add('open'); document.body.style.overflow = 'hidden'; $('lbPrev').disabled = $('lbNext').disabled = cur().length < 2; setTimeout(function(){ $('lbX').focus(); }, 30); }
+    function lbClose(){ lb.classList.remove('open'); document.body.style.overflow = ''; screen.focus(); }
+    $('lbX').addEventListener('click', lbClose);
+    $('lbNext').addEventListener('click', function(){ step(1); });
+    $('lbPrev').addEventListener('click', function(){ step(-1); });
+    lb.addEventListener('click', function(e){ if(e.target === lb) lbClose(); });
+    document.addEventListener('keydown', function(e){
+      if(!lb.classList.contains('open')) return;
+      var k = e.key || e.keyCode;
+      if(k === 'Escape' || k === 27 || k === 'Backspace' || k === 8){ lbClose(); e.preventDefault(); }
+      else if(k === 'ArrowLeft' || k === 37){ step(1); e.preventDefault(); }
+      else if(k === 'ArrowRight' || k === 39){ step(-1); e.preventDefault(); }
+    });
+    var lx = null;
+    lb.addEventListener('touchstart', function(e){ lx = e.touches[0].clientX; }, { passive:true });
+    lb.addEventListener('touchend', function(e){ if(lx === null) return; var dx = e.changedTouches[0].clientX - lx; lx = null; if(Math.abs(dx) > 50) step(dx > 0 ? 1 : -1); });
+
+    $('shots').classList.remove('hide');
+    // الصور تُحمَّل عند الاقتراب من القسم فقط (لا تبطئ فتح الصفحة على التلفاز)
+    if('IntersectionObserver' in window){
+      var io = new IntersectionObserver(function(en){ if(en[0].isIntersecting){ io.disconnect(); if(!started) pick(0, 0); } }, { rootMargin:'400px' });
+      io.observe($('shots'));
+      Array.prototype.forEach.call(tabsEl.children, function(b, m){ b.setAttribute('aria-selected', m === 0 ? 'true' : 'false'); });
+    } else pick(0, 0);
   }
 
   // عدّاد التحميل (Supabase — الرابط والمفتاح العام من site.json، تضبطهما لوحة CineMax Admin)
